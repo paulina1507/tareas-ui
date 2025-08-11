@@ -1,17 +1,21 @@
 📋 **Gestor de Tareas — Interfaz y Consumo de API**
+
 Este proyecto es una interfaz en React + TailwindCSS para consumir una API REST de gestión de tareas.
 Permite crear, listar, editar, completar y eliminar tareas con una experiencia visual tipo post-it.
 
 🚀 **Tecnologías utilizadas**
+
 React + Vite
 TypeScript
 TailwindCSS
 Fetch API para llamadas HTTP
 
 📡 **API REST — Endpoints**
+
 La API expone los siguientes endpoints:
 
 **Método	Endpoint	Descripción**
+
 GET	/tasks	Lista todas las tareas.
 POST	/tasks	Crea una nueva tarea.
 PUT	/tasks/:id	Actualiza una tarea existente.
@@ -29,6 +33,7 @@ type Task = {
 };
 
 🖥️ **Flujo de la interfaz**
+
 Carga inicial
 useEffect llama a api.list() y guarda el resultado en el estado tasks.
 
@@ -47,6 +52,7 @@ Eliminar tarea
 Al confirmar, se llama a api.remove() y se elimina del estado local.
 
 🎨 **Características visuales**
+
 Diseño tipo post-it amarillo con sombra y ligera rotación.
 
 🔧 **Instalación y uso**
