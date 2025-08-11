@@ -1,69 +1,65 @@
-# React + TypeScript + Vite
+📋 **Gestor de Tareas — Interfaz y Consumo de API**
+Este proyecto es una interfaz en React + TailwindCSS para consumir una API REST de gestión de tareas.
+Permite crear, listar, editar, completar y eliminar tareas con una experiencia visual tipo post-it.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+🚀 **Tecnologías utilizadas**
+React + Vite
+TypeScript
+TailwindCSS
+Fetch API para llamadas HTTP
 
-Currently, two official plugins are available:
+📡 **API REST — Endpoints**
+La API expone los siguientes endpoints:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+**Método	Endpoint	Descripción**
+GET	/tasks	Lista todas las tareas.
+POST	/tasks	Crea una nueva tarea.
+PUT	/tasks/:id	Actualiza una tarea existente.
+DELETE	/tasks/:id	Elimina una tarea.
 
-## Expanding the ESLint configuration
+📦 **Estructura de una tarea (Task)**
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+type Task = {
+  id: number;
+  title: string;
+  description?: string;
+  completed: boolean;
+  created_at: string;
+  updated_at: string;
+};
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+🖥️ **Flujo de la interfaz**
+Carga inicial
+useEffect llama a api.list() y guarda el resultado en el estado tasks.
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+Crear tarea
+El formulario (TaskForm) llama a api.create().
+Si es exitoso, la nueva tarea se agrega al inicio de la lista.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Editar tarea
+TaskItem permite activar el modo edición.
+Al guardar, se llama a api.update().
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Completar tarea
+Al marcar/desmarcar el checkbox, se envía un PUT con el estado completed.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Eliminar tarea
+Al confirmar, se llama a api.remove() y se elimina del estado local.
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+🎨 **Características visuales**
+Diseño tipo post-it amarillo con sombra y ligera rotación.
+
+🔧 **Instalación y uso**
+
+# Clonar repositorio
+git clone https://github.com/usuario/gestor-tareas.git
+cd gestor-tareas
+
+# Instalar dependencias
+npm install
+
+# Ejecutar en desarrollo
+npm run dev
+
+# Compilar para producción
+npm run build
