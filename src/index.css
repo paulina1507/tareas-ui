@@ -28,8 +28,7 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
+  display: block;
   min-width: 320px;
   min-height: 100vh;
 }
@@ -70,3 +69,25 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+/* textura ligera de papel */
+.note-texture {
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255,255,255,0.15) 0px,
+      rgba(255,255,255,0.15) 1px,
+      transparent 1px,
+      transparent 10px
+    );
+}
+
+/* sombra "inclinada" estilo post-it */
+.note-shadow {
+  box-shadow:
+    0 8px 18px rgba(0,0,0,0.25),
+    10px 14px 0 -10px rgba(0,0,0,0.15);
+}
+/* Cualquier elemento dentro de un post‑it usará negro por defecto */
+.note-texture, .note-texture * { color: #111 !important; }
+
