@@ -18,15 +18,18 @@ export default function TaskItem({
   const [saving, setSaving] = useState(false);
 
   const save = async () => {
-    if (!title.trim()) return;
-    setSaving(true);
-    try {
-      await onEdit(task.id, title.trim(), desc.trim() || undefined);
-      setEditing(false);
-    } finally {
-      setSaving(false);
-    }
-  };
+  if (!title.trim()) return;
+  const ok = window.confirm("¿Guardar cambios de esta tarea?");
+  if (!ok) return;
+  setSaving(true);
+  try {
+    await onEdit(task.id, title.trim(), desc.trim() || undefined);
+    setEditing(false);
+  } finally {
+    setSaving(false);
+  }
+};
+
 
   return (
     <li className="group p-4 rounded-2xl border border-slate-700 bg-slate-800/70 shadow hover:border-slate-600 transition flex items-start gap-3">
@@ -96,10 +99,14 @@ export default function TaskItem({
           </button>
           <button
             className="rounded-lg bg-rose-600 px-3 py-1 hover:bg-rose-500"
-            onClick={() => onDelete(task.id)}
-          >
+            onClick={() => {
+                const ok = window.confirm("¿Eliminar esta tarea? Esta acción no se puede deshacer.");
+                if (ok) onDelete(task.id);
+            }}
+            >
             Eliminar
-          </button>
+            </button>
+
         </div>
       )}
     </li>

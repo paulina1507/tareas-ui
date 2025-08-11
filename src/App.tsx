@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import { api, type Task } from "./lib/api";
 import TaskForm from "./components/TaskForm";
 import TaskList from "./components/TaskList";
+import { ToastProvider, useToast } from "./components/Toast"; // +++ import nuevo
 import "./index.css";
 
 export default function App() {
+  const toast = useToast();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -16,22 +18,51 @@ export default function App() {
     api.list().then(setTasks).catch(e=>setError(e.message)).finally(()=>setLoading(false));
   }, []);
 
-  const onCreate = async (p:{title:string; description?:string}) => {
+const onCreate = async (p:{title:string; description?:string}) => {
+  try {
     const t = await api.create(p);
     setTasks(prev => [t, ...prev]);
-  };
-  const onToggle = async (id:number, completed:boolean) => {
+    toast({ type: "success", message: "Tarea creada ✅" });
+  } catch (e:any) {
+    toast({ type: "error", message: `Error al crear: ${e.message || e}` });
+  }
+};
+
+
+const onToggle = async (id:number, completed:boolean) => {
+  try {
     const t = await api.update(id, { completed });
     setTasks(prev => prev.map(x => x.id === id ? t : x));
-  };
-  const onDelete = async (id:number) => {
+    toast({ type: "success", message: completed ? "Tarea completada" : "Marcada como pendiente" });
+  } catch (e:any) {
+    toast({ type: "error", message: "No se pudo actualizar el estado" });
+    throw e;
+  }
+};
+
+const onDelete = async (id:number) => {
+  try {
     await api.remove(id);
     setTasks(prev => prev.filter(x => x.id !== id));
-  };
-  const onEdit = async (id:number, title:string, description?:string) => {
+    toast({ type: "success", message: "Tarea eliminada" });
+  } catch (e:any) {
+    toast({ type: "error", message: "No se pudo eliminar la tarea" });
+    throw e;
+  }
+};
+
+const onEdit = async (id:number, title:string, description?:string) => {
+  try {
     const t = await api.update(id, { title, description: description ?? null as any });
     setTasks(prev => prev.map(x => x.id === id ? t : x));
-  };
+    toast({ type: "success", message: "Tarea actualizada" });
+  } catch (e:any) {
+    toast({ type: "error", message: "No se pudo actualizar la tarea" });
+    throw e;
+  }
+};
+
+
 
   // Filtro + búsqueda + orden
   const filteredTasks = tasks
@@ -48,6 +79,7 @@ export default function App() {
 
   if (loading) {
     return (
+      <ToastProvider>
       <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800 text-slate-100">
         <div className="max-w-3xl mx-auto px-4 py-10 space-y-3">
           {[...Array(4)].map((_,i)=>(
@@ -55,6 +87,7 @@ export default function App() {
           ))}
         </div>
       </div>
+      </ToastProvider>
     );
   }
 
